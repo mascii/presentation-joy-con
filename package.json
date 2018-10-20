@@ -1,0 +1,14 @@
+{
+  "name": "presentation-joy-con",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "minify": "minify src -d dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-minify": "^0.5.0"
+  }
+}
