@@ -19,7 +19,7 @@
         isPressing = true;
     };
     setInterval(() => {
-        const gamepad = navigator.getGamepads()[0];
+        const gamepad = [].find.call(navigator.getGamepads(), gamepad => gamepad !== null);
         if (gamepad) {
             const buttons = gamepad.buttons;
             if (buttons[leftButton].pressed) {
