@@ -9,7 +9,7 @@
         }
 
         const activeElement = document.activeElement;
-        const global = document.activeElement.tagName === 'IFRAME' ? activeElement.contentWindow : window;
+        const global = activeElement.tagName === 'IFRAME' ? activeElement.contentWindow : window;
         ['keydown', 'keyup'].forEach(typeArg => {
             [global.document, global].forEach(target => {
                 target.dispatchEvent(new KeyboardEvent(typeArg, { keyCode }));
