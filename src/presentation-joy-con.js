@@ -1,6 +1,6 @@
 (() => {
-    const [leftButton, rightButton] = [0, 3];
-    const [leftArrowKeyCode, rightArrowKeyCode] = [37, 39];
+    const [LEFT_BUTTON, RIGHT_BUTTON] = [0, 3];
+    const [LEFT_ARROW_KEY_CODE, RIGHT_ARROW_KEY_CODE] = [37, 39];
 
     let isPressing = false;
     const pressKey = keyCode => {
@@ -22,11 +22,11 @@
         const gamepad = [].find.call(navigator.getGamepads(), gamepad => gamepad !== null);
         if (gamepad) {
             const buttons = gamepad.buttons;
-            if (buttons[leftButton].pressed) {
-                pressKey(leftArrowKeyCode);
+            if (buttons[LEFT_BUTTON].pressed) {
+                pressKey(LEFT_ARROW_KEY_CODE);
                 return;
-            } else if (buttons[rightButton].pressed) {
-                pressKey(rightArrowKeyCode);
+            } else if (buttons[RIGHT_BUTTON].pressed) {
+                pressKey(RIGHT_ARROW_KEY_CODE);
                 return;
             }
         }
