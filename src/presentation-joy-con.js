@@ -2,7 +2,8 @@
     const [LEFT_BUTTON, RIGHT_BUTTON] = [0, 3];
     const [LEFT_ARROW_KEY_CODE, RIGHT_ARROW_KEY_CODE] = [37, 39];
 
-    let isPressing = false;
+    let gamepadIndex, intervalID, isPressing = false;
+
     const pressKey = keyCode => {
         if (isPressing) {
             return;
@@ -18,10 +19,14 @@
 
         isPressing = true;
     };
-    setInterval(() => {
-        const gamepad = [].find.call(navigator.getGamepads(), gamepad => gamepad !== null);
-        if (gamepad) {
-            const buttons = gamepad.buttons;
+
+    addEventListener('gamepadconnected', e => {
+        if (gamepadIndex != null || !e.gamepad.id.includes('Joy-Con (L)')) {
+            return;
+        }
+        gamepadIndex = e.gamepad.index;
+        intervalID = setInterval(() => {
+            const buttons = navigator.getGamepads()[gamepadIndex].buttons;
             if (buttons[LEFT_BUTTON].pressed) {
                 pressKey(LEFT_ARROW_KEY_CODE);
                 return;
@@ -29,7 +34,13 @@
                 pressKey(RIGHT_ARROW_KEY_CODE);
                 return;
             }
+            isPressing = false;
+        }, 1000 / 60);
+    });
+    addEventListener('gamepaddisconnected', e => {
+        if (gamepadIndex === e.gamepad.index) {
+            clearInterval(intervalID);
+            gamepadIndex = intervalID = null;
         }
-        isPressing = false;
-    }, 1000 / 60);
+    });
 })();
