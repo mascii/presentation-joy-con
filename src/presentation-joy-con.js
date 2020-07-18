@@ -45,12 +45,16 @@
     });
 
     if (navigator.wakeLock) {
-        const requestWakeLock = () => {
-            if (document.visibilityState === 'visible') {
-                navigator.wakeLock.request('screen').catch(() => {});
+        const requestWakeLock = (isFirstRequest) => {
+            if (document.visibilityState !== 'visible') {
+                return;
             }
+            navigator.wakeLock.request('screen').then(() => {
+                if (isFirstRequest) {
+                    document.addEventListener('visibilitychange', requestWakeLock);
+                }
+            }).catch(() => {});
         };
-        document.addEventListener('visibilitychange', requestWakeLock);
-        requestWakeLock();
+        requestWakeLock(1);
     }
 })();
