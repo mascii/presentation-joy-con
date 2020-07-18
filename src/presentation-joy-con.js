@@ -56,6 +56,6 @@
                 }
             }).catch(() => {});
         };
-        requestWakeLock(1);
+        requestWakeLock(true);
     }
 })();
