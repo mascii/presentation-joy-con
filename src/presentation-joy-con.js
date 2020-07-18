@@ -52,6 +52,7 @@
             navigator.wakeLock.request('screen').then(() => {
                 if (isFirstRequest) {
                     document.addEventListener('visibilitychange', requestWakeLock);
+                    document.addEventListener('fullscreenchange', requestWakeLock);
                 }
             }).catch(() => {});
         };
