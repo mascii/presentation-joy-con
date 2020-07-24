@@ -43,4 +43,19 @@
             gamepadIndex = intervalID = null;
         }
     });
+
+    if (navigator.wakeLock) {
+        const requestWakeLock = (isFirstRequest) => {
+            if (document.visibilityState !== 'visible') {
+                return;
+            }
+            navigator.wakeLock.request('screen').then(() => {
+                if (isFirstRequest) {
+                    document.addEventListener('visibilitychange', requestWakeLock);
+                    document.addEventListener('fullscreenchange', requestWakeLock);
+                }
+            }).catch(() => {});
+        };
+        requestWakeLock(true);
+    }
 })();
