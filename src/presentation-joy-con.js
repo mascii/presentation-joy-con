@@ -10,11 +10,9 @@
         }
 
         const activeElement = document.activeElement;
-        const global = activeElement.tagName === 'IFRAME' ? activeElement.contentWindow : window;
+        const targetDocument = activeElement.tagName === 'IFRAME' ? activeElement.contentDocument : document;
         ['keydown', 'keyup'].forEach(typeArg => {
-            [global.document.body, global].forEach(target => {
-                target.dispatchEvent(new KeyboardEvent(typeArg, { keyCode, bubbles: true }));
-            });
+            targetDocument.body.dispatchEvent(new KeyboardEvent(typeArg, { keyCode, bubbles: true }));
         });
 
         isPressing = true;
