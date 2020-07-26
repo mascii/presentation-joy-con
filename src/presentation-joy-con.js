@@ -1,4 +1,6 @@
 (() => {
+    const VENDOR_ID = '057e';
+    const DEVICE_ID = '2006';
     const [LEFT_BUTTON, RIGHT_BUTTON] = [0, 3];
     const [LEFT_ARROW_KEY_CODE, RIGHT_ARROW_KEY_CODE] = [37, 39];
 
@@ -19,7 +21,8 @@
     };
 
     addEventListener('gamepadconnected', e => {
-        if (gamepadIndex != null || !e.gamepad.id.includes('Joy-Con (L)')) {
+        const gamepadId = e.gamepad.id;
+        if (gamepadIndex != null || !gamepadId.includes(VENDOR_ID) || !gamepadId.includes(DEVICE_ID)) {
             return;
         }
         gamepadIndex = e.gamepad.index;
