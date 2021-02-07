@@ -1,41 +1,40 @@
-(() => {
+((document, navigator, addEventListener) => {
     const VENDOR_ID = '057e';
     const DEVICE_ID = '2006';
-    const [LEFT_BUTTON, RIGHT_BUTTON] = [0, 3];
-    const [LEFT_ARROW_KEY_CODE, RIGHT_ARROW_KEY_CODE] = [37, 39];
-
-    let gamepadIndex, intervalID, isPressing = false;
+    const LEFT_BUTTON = 0
+    const RIGHT_BUTTON = 3;
+    const LEFT_ARROW_KEY_CODE = 37;
+    const RIGHT_ARROW_KEY_CODE = 39;
 
     const pressKey = keyCode => {
-        if (isPressing) {
-            return;
-        }
-
         const activeElement = document.activeElement;
         const targetDocument = activeElement.tagName === 'IFRAME' ? activeElement.contentDocument : document;
         ['keydown', 'keyup'].forEach(typeArg => {
             targetDocument.body.dispatchEvent(new KeyboardEvent(typeArg, { keyCode, bubbles: true }));
         });
-
-        isPressing = true;
     };
 
-    addEventListener('gamepadconnected', e => {
-        const gamepadId = e.gamepad.id;
-        if (gamepadIndex != null || !gamepadId.includes(VENDOR_ID) || !gamepadId.includes(DEVICE_ID)) {
+    let gamepadIndex, intervalID;
+
+    addEventListener('gamepadconnected', ({ gamepad }) => {
+        if (gamepadIndex != null || !gamepad.id.includes(VENDOR_ID) || !gamepad.id.includes(DEVICE_ID)) {
             return;
         }
-        gamepadIndex = e.gamepad.index;
+        gamepadIndex = gamepad.index;
+
+        let isPressing = false;
         intervalID = setInterval(() => {
-            const buttons = navigator.getGamepads()[gamepadIndex].buttons;
-            if (buttons[LEFT_BUTTON].pressed) {
-                pressKey(LEFT_ARROW_KEY_CODE);
-                return;
-            } else if (buttons[RIGHT_BUTTON].pressed) {
-                pressKey(RIGHT_ARROW_KEY_CODE);
-                return;
-            }
-            isPressing = false;
+            isPressing = (gamepad => {
+                const buttons = gamepad.buttons;
+                if (buttons[LEFT_BUTTON].pressed) {
+                    !isPressing && pressKey(LEFT_ARROW_KEY_CODE);
+                    return true;
+                } else if (buttons[RIGHT_BUTTON].pressed) {
+                    !isPressing && pressKey(RIGHT_ARROW_KEY_CODE);
+                    return true;
+                }
+                return false;
+            })(navigator.getGamepads()[gamepadIndex]);
         }, 1000 / 60);
     });
     addEventListener('gamepaddisconnected', e => {
@@ -46,7 +45,7 @@
     });
 
     if (navigator.wakeLock) {
-        const requestWakeLock = (isFirstRequest) => {
+        const requestWakeLock = isFirstRequest => {
             if (document.visibilityState !== 'visible') {
                 return;
             }
@@ -59,4 +58,4 @@
         };
         requestWakeLock(true);
     }
-})();
+})(document, navigator, addEventListener);
