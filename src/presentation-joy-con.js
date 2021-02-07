@@ -3,6 +3,7 @@
     const DEVICE_ID = '2006';
     const LEFT_BUTTON = 0
     const RIGHT_BUTTON = 3;
+    const CAPTURE_BUTTON = 16;
     const LEFT_ARROW_KEY_CODE = 37;
     const RIGHT_ARROW_KEY_CODE = 39;
 
@@ -12,6 +13,17 @@
         ['keydown', 'keyup'].forEach(typeArg => {
             targetDocument.body.dispatchEvent(new KeyboardEvent(typeArg, { keyCode, bubbles: true }));
         });
+    };
+
+    const playEffect = ({ vibrationActuator }, startDelay, duration) => {
+        if (vibrationActuator) {
+            return vibrationActuator.playEffect(vibrationActuator.type, {
+                startDelay,
+                duration,
+                strongMagnitude: 0.8,
+            });
+        }
+        return Promise.resolve();
     };
 
     let gamepadIndex, intervalID;
@@ -31,6 +43,9 @@
                     return true;
                 } else if (buttons[RIGHT_BUTTON].pressed) {
                     !isPressing && pressKey(RIGHT_ARROW_KEY_CODE);
+                    return true;
+                } else if (buttons[CAPTURE_BUTTON].pressed) {
+                    !isPressing && playEffect(gamepad, 0, 10);
                     return true;
                 }
                 return false;
