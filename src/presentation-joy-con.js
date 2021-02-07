@@ -1,5 +1,5 @@
 ((document, navigator, addEventListener) => {
-    const VENDOR_ID = '057e';
+    const VENDOR_ID = '57e';
     const DEVICE_ID = '2006';
     const LEFT_BUTTON = 0
     const RIGHT_BUTTON = 3;
