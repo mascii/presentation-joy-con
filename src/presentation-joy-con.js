@@ -51,6 +51,9 @@
                 return false;
             })(navigator.getGamepads()[gamepadIndex]);
         }, 1000 / 60);
+
+        const dot = () => playEffect(gamepad, 300, 5);
+        dot().then(dot).then(dot);
     });
     addEventListener('gamepaddisconnected', e => {
         if (gamepadIndex === e.gamepad.index) {
