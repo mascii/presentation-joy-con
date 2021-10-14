@@ -4,14 +4,16 @@
     const LEFT_BUTTON = 0
     const RIGHT_BUTTON = 3;
     const CAPTURE_BUTTON = 16;
+    const LEFT_ARROW_KEY = 'ArrowLeft';
     const LEFT_ARROW_KEY_CODE = 37;
+    const RIGHT_ARROW_KEY = 'ArrowRight';
     const RIGHT_ARROW_KEY_CODE = 39;
 
-    const pressKey = keyCode => {
+    const pressKey = (key, keyCode) => {
         const activeElement = document.activeElement;
         const targetDocument = activeElement.tagName === 'IFRAME' ? activeElement.contentDocument : document;
         ['keydown', 'keyup'].forEach(typeArg => {
-            targetDocument.body.dispatchEvent(new KeyboardEvent(typeArg, { keyCode, bubbles: true }));
+            targetDocument.body.dispatchEvent(new KeyboardEvent(typeArg, { key, keyCode, bubbles: true }));
         });
     };
 
@@ -39,10 +41,10 @@
             isPressing = (gamepad => {
                 const buttons = gamepad.buttons;
                 if (buttons[LEFT_BUTTON].pressed) {
-                    !isPressing && pressKey(LEFT_ARROW_KEY_CODE);
+                    !isPressing && pressKey(LEFT_ARROW_KEY, LEFT_ARROW_KEY_CODE);
                     return true;
                 } else if (buttons[RIGHT_BUTTON].pressed) {
-                    !isPressing && pressKey(RIGHT_ARROW_KEY_CODE);
+                    !isPressing && pressKey(RIGHT_ARROW_KEY, RIGHT_ARROW_KEY_CODE);
                     return true;
                 } else if (buttons[CAPTURE_BUTTON].pressed) {
                     !isPressing && playEffect(gamepad, 0, 10);
